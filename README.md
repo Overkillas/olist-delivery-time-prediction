@@ -1,6 +1,6 @@
 # Projeto 2 — Aprendizado de Máquina: Olist
 
-Previsão do **tempo de entrega** de pedidos do marketplace **Olist** usando um *pipeline* completo de Machine Learning (engenharia de atributos, EDA, treinamento e avaliação de modelos de regressão).
+Previsão do **tempo de entrega** de pedidos do marketplace **Olist** — cobrindo as etapas de definição do problema, pré-processamento dos dados (engenharia de atributos, limpeza, imputação, escalonamento e codificação) e Análise Exploratória de Dados (EDA).
 
 > Disciplina **T326 - Ciência dos Dados** — Professor Caio Ponte — Turma 16/17
 
@@ -24,7 +24,7 @@ av2 - compt dist/
 │   ├── olist_sellers_dataset.csv
 │   └── product_category_name_translation.csv
 ├── import_dataset.py                        ← script de download via kagglehub
-└── olist_delivery_time_prediction.ipynb     ← notebook principal (52 células)
+└── olist_delivery_time_prediction.ipynb     ← notebook principal (32 células)
 ```
 
 ---
@@ -126,14 +126,12 @@ Na interface aberta no navegador, clique em `olist_delivery_time_prediction.ipyn
 
 No menu, escolha **Cell → Run All** (ou `Kernel → Restart & Run All` para garantir um *kernel* limpo).
 
-A execução completa leva alguns minutos por causa do tuning de hiperparâmetros (`GridSearchCV` e `RandomizedSearchCV` em 4 modelos diferentes). Você verá:
+A execução completa é rápida (sem tuning de modelos). Você verá:
 
 1. **Setup** — imports e validação dos arquivos do dataset
 2. **Seção 1** — definição do problema e schema das tabelas
 3. **Seção 2** — pré-processamento (engenharia de atributos, limpeza, imputação, escalonamento, codificação)
 4. **Seção 3** — EDA (distribuições, outliers, correlações, mapas geográficos)
-5. **Seção 4** — treinamento e tuning de Ridge, Random Forest, Gradient Boosting e KNN
-6. **Seção 5** — avaliação no conjunto de teste, benchmark e conclusão
 
 ---
 
@@ -144,15 +142,14 @@ A execução completa leva alguns minutos por causa do tuning de hiperparâmetro
 | `FileNotFoundError: Arquivos do dataset não encontrados` | CSVs não estão em `dataset/` | Verifique se os 9 arquivos estão na pasta correta com os nomes exatos |
 | `ModuleNotFoundError: category_encoders` (ou outra lib) | Dependências não instaladas | Rode `pip install -r requirements.txt` com o venv ativo |
 | Mapas Plotly não aparecem | *Renderer* não detectado | No Jupyter Notebook clássico instale `pip install "notebook>=7"` ou abra o notebook no VS Code/Lab |
-| Tuning muito demorado | Datasets grandes + busca exaustiva | Reduza `n_iter` no `RandomizedSearchCV` ou diminua os ranges de hiperparâmetros |
 | Erro de autenticação no `kagglehub` | Chave da API ausente | Gere `kaggle.json` em <https://www.kaggle.com/settings> e coloque em `~/.kaggle/` |
 
 ---
 
 ## Reprodutibilidade
 
-- Seed global: `SEED = 42` aplicada em `numpy`, `train_test_split`, `KFold`, `RandomForestRegressor`, `GradientBoostingRegressor`, `Ridge` e `RandomizedSearchCV`.
-- Pré-processamento (imputação, escala, codificação) está encapsulado em `Pipeline` + `ColumnTransformer` — **não há vazamento de dados** entre treino e teste.
+- Seed global: `SEED = 42` aplicada em `numpy`.
+- Pré-processamento (imputação, escala, codificação) encapsulado em `Pipeline` + `ColumnTransformer`.
 - O notebook salva todas as suas saídas (gráficos, tabelas), então pode ser revisado mesmo sem reexecução.
 
 ---
