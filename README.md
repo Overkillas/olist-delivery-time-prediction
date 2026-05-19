@@ -1,6 +1,6 @@
 # Projeto 2 — Aprendizado de Máquina: Olist
 
-Predição do **tempo de entrega** (em dias) de pedidos do marketplace **Olist** — pipeline completo de Aprendizado de Máquina cobrindo definição do problema, pré-processamento, EDA, análise de utilidade de features, treinamento com tuning e avaliação final.
+Predição do **tempo de entrega** (em dias) de pedidos do marketplace **Olist** — pipeline completo de Aprendizado de Máquina cobrindo definição do problema, pré-processamento, EDA, análise de utilidade de features, treinamento com tuning e avaliação final. O modelo principal usa o prazo estimado pela própria Olist como feature operacional e inclui uma ablação sem essa variável.
 
 > Disciplina **T326 - Ciência dos Dados** — Professor Caio Ponte — Turma 16/17
 
@@ -12,7 +12,9 @@ Predição do **tempo de entrega** (em dias) de pedidos do marketplace **Olist**
 |---|---|---|---|
 | **HistGradientBoosting** | **5.87 dias** | **4.16 dias** | **0.435** |
 
-Bate o baseline ingênuo (`DummyRegressor`) em **1.85 dia de RMSE**. Foram treinados 4 modelos de 3 famílias diferentes (Ridge, Decision Tree, Random Forest, HistGradientBoosting), todos tunados com `GridSearchCV` / `RandomizedSearchCV` em validação cruzada de 5 folds. Detalhes na Seção 6 do notebook.
+Bate o baseline ingênuo (`DummyRegressor`) no conjunto de teste em **1.94 dia de RMSE**. Foram treinados 4 modelos de 3 famílias diferentes (Ridge, Decision Tree, Random Forest, HistGradientBoosting), todos tunados com `GridSearchCV` / `RandomizedSearchCV` em validação cruzada de 5 folds. Detalhes na Seção 6 do notebook.
+
+Como `estimated_delivery_days` é uma estimativa operacional do mesmo fenômeno, o notebook também traz uma ablação sem essa feature: o RMSE do HistGradientBoosting sobe de **5.87** para **5.93 dias** (+0.06), indicando que ela ajuda, mas o modelo não depende exclusivamente dela.
 
 ---
 
@@ -33,10 +35,8 @@ av2 - compt dist/
 │   ├── olist_products_dataset.csv
 │   ├── olist_sellers_dataset.csv
 │   └── product_category_name_translation.csv
-├── docs/
-│   └── Projeto 2 - Aprendizado de Máquina_ Olist.pdf  ← enunciado oficial
 ├── import_dataset.py                        ← script de download via kagglehub
-└── olist_delivery_time_prediction.ipynb     ← notebook principal (79 células, 6 seções)
+└── olist_delivery_time_prediction.ipynb     ← notebook principal (81 células, 6 seções)
 ```
 
 ---
@@ -153,7 +153,7 @@ O notebook **já vem com todos os outputs salvos** (tabelas, gráficos, métrica
 
 Se quiser reexecutar do zero:
 - **Cell → Run All** ou **Kernel → Restart & Run All**.
-- A execução completa demora **~15-25 minutos**, dominada pelo tuning do Random Forest (~15 min) e do HistGradientBoosting (~4 min) na Seção 5.
+- A execução completa pode demorar **~40-50 minutos** dependendo da máquina, dominada pelo tuning do Random Forest (~37 min) e do HistGradientBoosting (~5 min) na Seção 5.
 - Se quiser uma execução rápida (sem tuning), pule as células das Seções 5.7 e 5.8 que rodam `RandomizedSearchCV`.
 
 ---
